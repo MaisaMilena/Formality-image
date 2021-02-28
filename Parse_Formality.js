@@ -1,33 +1,6 @@
 const fs = require('fs');
 var path = require("path");
 
-// Personagem: Mons.Assets.name_dir_frame.fm
-// - Mons.Assets.boy_l_0.fm // standing
-// - Mons.Assets.boy_l_1.fm // walking
-// - Mons.Assets.boy_l_2.fm // walking
-
-// Arquitetura: Mons.Assets.name_xy.fm
-// - Mons.Assets.house_00.fm // x=0, y=0
-// - Mons.Assets.house_10.fm // x=1, y=0
-// - Mons.Assets.house_20.fm // x=2, y=0
-
-// Chão: Mons.Assets.name.fm ou Mons.Assets.name.fm
-// - Mons.Assets.grass.fm    // tile
-// - Mons.Assets.grass_u.fm  // border up
-// - Mons.Assets.grass_l.fm  // border left
-// - Mons.Assets.grass_ru.fm // border right-up
-// - Mons.Assets.grass_lu.fm // border left-up
-// - Mons.Assets.grass_rd.fm // border right-down
-// - Mons.Assets.grass_o.fm  // border circle
-
-// Item: Mons.Assets.name_frame.fm
-// - Mons.Assets.flower_0.fm // frame 0
-// - Mons.Assets.flower_1.fm // frame 1
-
-// lrd           : left right up
-// l | r | d | u : left, right, down, up
-// o             : circle
-
 // Font content
 // ------------
 async function set_font_content(fm_char_imgs){
@@ -58,11 +31,11 @@ function set_font_map(fm_char_imgs){
   var content =
 `// Creates a Map of [{key: Char, value: Image3D}]
 // Qtd characters: ${qtd_files}
-Mons.font_white: Mons.font
+Mons.Char_black.font: Mons.font
   let map = Map.new<Image3D>
 `
   fm_char_imgs.map(name => {
-    if(name !== "Mons.font.fm" && name !== "Mons.font_white.fm" && name !== ".DS_Store"){
+    if(name !== "font.kind" && name !== ".DS_Store"){
       var nane_form = name.slice(0, -3);
       var char_code = get_char_code(name);
       var char_name = String.fromCharCode(char_code);
@@ -80,13 +53,13 @@ function get_char_code(fm_char_img){
 // IMPORTANT: this file must be updated manually due to the extra 
 // symbols like ① ②. Their code is the HTML code related to the unicode symbol
 async function save_font_file(content){
-  // var path = "./fm_font/font_white/"+"Mons.font_white.fm";
-  // try {
-  //   fs.writeFileSync(path, content);
-  //   return "Saved "+path;
-  // } catch (e) {
-  //   throw e;
-  // }
+  var path = "./fm_font/font_black/"+"font.kind";
+  try {
+    fs.writeFileSync(path, content);
+    return "Saved "+path;
+  } catch (e) {
+    throw e;
+  }
 }
 
 
@@ -113,13 +86,6 @@ function image_to_hex(image_name, image_info) {
   }
   return b.slice(0, c * 6).toString("hex");
 }
-
-// Example
-// [
-//   [(GRASS, z=1)],
-//   [(BUSH_BACK, z=2), (BUSH_FRONT, z=16)]
-//   [(HERO, z=4..28), (BUSH_ANIM, z=30)]
-// ]
 
 // Return the value of the z_index
 // Font: default 30
@@ -155,12 +121,12 @@ const file_content = (image_name, image_info) => {
   var z_index_comment = "// z_index: "+z_index(image_name);
   var caractere = "// caractere: "+String.fromCharCode(image_name)+"\n";
   var scale = has_z_index(image_name) ? ", will scale on y\n" : "\n";
-  return z_index_comment+scale+caractere+"Mons.Char_white."+term_name(image_name)+": Image3D\n" + 
+  return z_index_comment+scale+caractere+"Mons.Char_black."+term_name(image_name)+": Image3D\n" + 
     '  Image3D.parse("'+hex_content+'")';
 }
 
 async function save_fm_file(image_name, content){
-  var path = "./fm_font/font_white/"+"Mons.Char_white."+term_name(image_name)+".fm";
+  var path = "./fm_font/font_black/"+term_name(image_name)+".kind";
   try {
     fs.writeFileSync(path, content);
     return "Saved "+path;

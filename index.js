@@ -24,7 +24,7 @@ function parse_single_image(dirname, image_name){
     .catch( err => console.warn(err));//"index.js: got an error of MIME for Buffer from Jimp") );
 }
 
-async function set_dicionary(dirname){
+async function set_dictionary(dirname){
   await fs.readdir(dirname, function(err, filenames) {
     if (err) {
       console.log(err);
@@ -35,8 +35,8 @@ async function set_dicionary(dirname){
 }
 
 // Runs the script in a folder
-parse_dir("./img/font_normal_w/")
-.then(() => { set_dicionary("./fm_font/font_white/") })
+parse_dir("./img/font_normal/")
+.then(() => { set_dictionary("./fm_font/font_large_black/") })
 .catch((err) => console.log(err));
 
 
