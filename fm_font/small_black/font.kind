@@ -1,0 +1,5 @@
+// Creates a Map of (key: String, value: Image3D)
+// Qtd characters: -2
+PixelFont.black: PixelFont
+  let map = Map.new<Image3D>
+  map

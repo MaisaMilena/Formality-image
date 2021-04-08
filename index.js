@@ -35,8 +35,8 @@ async function set_dictionary(dirname){
 }
 
 // Runs the script in a folder
-parse_dir("./img/font_normal/")
-.then(() => { set_dictionary("./fm_font/font_large_black/") })
+parse_dir("./img/black/")
+.then(() => { set_dictionary("./fm_font/black/") })
 .catch((err) => console.log(err));
 
 

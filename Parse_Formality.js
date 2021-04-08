@@ -4,23 +4,8 @@ var path = require("path");
 // Font content
 // ------------
 async function set_font_content(fm_char_imgs){
-  var funcs =
-`
-// Mons.font: Type
-//   Map(Image3D)
-
-// // Adds an Image3D to a char on the map
-// Mons.font.set_img(char: Char, img: Image3D, map: Mons.font): Mons.font
-//   Map.set<>(U16.to_bits(char), img, map)
-
-// Get the image given a map
-// Mons.font.get_img(char: Char, map: Mons.font): Maybe(Image3D)
-//   case Map.get<>(U16.to_bits(char), map) as got:
-//   | Maybe.none<Image3D>;
-//   | Maybe.some<Image3D>(got.value); \n
-`
   var map = set_font_map(fm_char_imgs);
-  var content = funcs + map;
+  var content = map;
   // Save it
   return save_font_file(content);
 }
@@ -29,17 +14,17 @@ async function set_font_content(fm_char_imgs){
 function set_font_map(fm_char_imgs){
   var qtd_files = fm_char_imgs.length - 2; // remove Mons.font.fm and .DS_Store
   var content =
-`// Creates a Map of [{key: Char, value: Image3D}]
+`// Creates a Map of (key: String, value: Image3D)
 // Qtd characters: ${qtd_files}
-Mons.Char_black.font: Mons.font
+PixelFont.black: PixelFont
   let map = Map.new<Image3D>
 `
   fm_char_imgs.map(name => {
     if(name !== "font.kind" && name !== ".DS_Store"){
-      var nane_form = name.slice(0, -3);
       var char_code = get_char_code(name);
+      var name_form = "PixelFont.black."+char_code;
       var char_name = String.fromCharCode(char_code);
-      content += "  let map = Mons.font.set_img("+char_code+"s, "+nane_form+", map) // add "+char_name+"\n";
+      content += "  let map = PixelFont.set_img("+char_code+"s, "+name_form+", map) // add "+char_name+"\n";
     }
   })
   content += "  map";
@@ -47,13 +32,13 @@ Mons.Char_black.font: Mons.font
 }
 
 function get_char_code(fm_char_img){
-  return  fm_char_img.split(".")[2]; // name like "Mons.Char.01.fm"
+  return fm_char_img.split(".")[0]; // name like "PixelFont.black.106.kind"
 }
 
 // IMPORTANT: this file must be updated manually due to the extra 
 // symbols like ① ②. Their code is the HTML code related to the unicode symbol
 async function save_font_file(content){
-  var path = "./fm_font/font_black/"+"font.kind";
+  var path = "./fm_font/black/"+"black.kind";
   try {
     fs.writeFileSync(path, content);
     return "Saved "+path;
@@ -74,8 +59,10 @@ function image_to_hex(image_name, image_info) {
   for(var i = 0; i < pixels.length; i++){
     var pixel = pixels[i];
     if(pixel.color.a !== 0){
-      b[c*6]   = pixel.x + (128 - (width / 2));
-      b[c*6+1] = pixel.y + (128 - (height / 2));
+      // b[c*6]   = pixel.x + (128 - (width / 2));
+      // b[c*6+1] = pixel.y + (128 - (height / 2));
+      b[c*6]   = pixel.x;
+      b[c*6+1] = pixel.y;
       b[c*6+2] = z_index(image_name) + (s ? (height - pixel.y - 1) : 0); // z
       b[c*6+3] = pixel.color.r;
       b[c*6+4] = pixel.color.g;
@@ -119,14 +106,14 @@ const term_name = (image_name) => {
 const file_content = (image_name, image_info) => {
   var hex_content = image_to_hex(image_name, image_info);
   var z_index_comment = "// z_index: "+z_index(image_name);
-  var caractere = "// caractere: "+String.fromCharCode(image_name)+"\n";
+  var char = "// char: "+String.fromCharCode(image_name)+"\n";
   var scale = has_z_index(image_name) ? ", will scale on y\n" : "\n";
-  return z_index_comment+scale+caractere+"Mons.Char_black."+term_name(image_name)+": Image3D\n" + 
+  return z_index_comment+scale+char+"PixelFont.black."+term_name(image_name)+": Image3D\n" + 
     '  Image3D.parse("'+hex_content+'")';
 }
 
 async function save_fm_file(image_name, content){
-  var path = "./fm_font/font_black/"+term_name(image_name)+".kind";
+  var path = "./fm_font/black/"+term_name(image_name)+".kind";
   try {
     fs.writeFileSync(path, content);
     return "Saved "+path;

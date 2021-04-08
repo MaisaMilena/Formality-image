@@ -1,4 +1,0 @@
-// z_index: 30
-// caractere: =
-Mons.Char_black.61: Image3D
-  Image3D.parse("7e7e1e2121287f7e1e212128807e1e2121287e801e2121287f801e21212880801e212128")
