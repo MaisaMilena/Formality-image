@@ -70,8 +70,8 @@ const file_content = (image_name, folder_name, image_info) => {
   var z_index_comment = "// z_index: "+z_index(image_name);
   var scale = z_scale(image_name) ? ", will scale on y\n" : "\n";
   var f_name = folder_name ? "." + folder_name : "" 
-  return z_index_comment+scale+"Kaelin.Assets"+f_name+"."+term_name(image_name)+": Image3D\n" + 
-    '  Image3D.parse("'+hex_content+'")';
+  return z_index_comment+scale+"Kaelin.Assets"+f_name+"."+term_name(image_name)+": VoxBox\n" + 
+    '  VoxBox.parse("'+hex_content+'")';
 }
 
 async function save_fm_file(folder, image_name, content){
