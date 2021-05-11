@@ -31,13 +31,6 @@ function image_to_hex(image_name, image_info) {
   return b.slice(0, c * 6).toString("hex");
 }
 
-// Example
-// [
-//   [(GRASS, z=1)],
-//   [(BUSH_BACK, z=2), (BUSH_FRONT, z=16)]
-//   [(HERO, z=4..28), (BUSH_ANIM, z=30)]
-// ]
-
 // Return the value of the z_index
 const z_index = (image_name) => {
   var z_index = has_z_index(image_name);
