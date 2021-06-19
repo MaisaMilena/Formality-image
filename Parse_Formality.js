@@ -10,21 +10,21 @@ async function set_font_content(fm_char_imgs){
   return save_font_file(content);
 }
 
-// Creates a Formality Map with [{key: Char, value: Image3D}]
+// Creates a Formality Map with [{key: Char, value: VoxBox}]
 function set_font_map(fm_char_imgs){
   var qtd_files = fm_char_imgs.length - 2; // remove Mons.font.fm and .DS_Store
   var content =
-`// Creates a Map of (key: String, value: Image3D)
+`// Creates a Map of (key: String, value: VoxBox)
 // Qtd characters: ${qtd_files}
 PixelFont.black: PixelFont
-  let map = Map.new<Image3D>
+  let map = Map.new<VoxBox>
 `
   fm_char_imgs.map(name => {
     if(name !== "font.kind" && name !== ".DS_Store"){
       var char_code = get_char_code(name);
       var name_form = "PixelFont.black."+char_code;
       var char_name = String.fromCharCode(char_code);
-      content += "  let map = PixelFont.set_img("+char_code+"s, "+name_form+", map) // add "+char_name+"\n";
+      content += "  let map = PixelFont.set_img("+char_code+"#16, "+name_form+", map) // add "+char_name+"\n";
     }
   })
   content += "  map";
@@ -38,7 +38,7 @@ function get_char_code(fm_char_img){
 // IMPORTANT: this file must be updated manually due to the extra 
 // symbols like ① ②. Their code is the HTML code related to the unicode symbol
 async function save_font_file(content){
-  var path = "./fm_font/black/"+"black.kind";
+  var path = "./fm_font/black/font.kind";
   try {
     fs.writeFileSync(path, content);
     return "Saved "+path;
@@ -108,8 +108,8 @@ const file_content = (image_name, image_info) => {
   var z_index_comment = "// z_index: "+z_index(image_name);
   var char = "// char: "+String.fromCharCode(image_name)+"\n";
   var scale = has_z_index(image_name) ? ", will scale on y\n" : "\n";
-  return z_index_comment+scale+char+"PixelFont.black."+term_name(image_name)+": Image3D\n" + 
-    '  Image3D.parse("'+hex_content+'")';
+  return z_index_comment+scale+char+"PixelFont.black."+term_name(image_name)+": VoxBox\n" + 
+    '  VoxBox.parse("'+hex_content+'")';
 }
 
 async function save_fm_file(image_name, content){
