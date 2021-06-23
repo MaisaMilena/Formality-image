@@ -12,19 +12,19 @@ function image_to_hex(image_name, image_info) {
   for(var i = 0; i < pixels.length; i++){
     var pixel = pixels[i];
     if(pixel.color.a !== 0){ // not transparent
-      // b[c*6]   = pixel.x + (128 - (width / 2));
-      // b[c*6+1] = s ? pixel.y + (128 - height + 8) : pixel.y + (128 - (height / 2));
-      // b[c*6+2] = z_index(image_name) + (s ? (height - pixel.y - 1) : 0); // z
-      // b[c*6+3] = pixel.color.r;
-      // b[c*6+4] = pixel.color.g;
-      // b[c*6+5] = pixel.color.b;
-      // console.log("i: ", i, pixel.y, height, z_index(image_name), b[c*6+2]);
-      b[c*6]   = pixel.x;
-      b[c*6+1] = pixel.y;
+      b[c*6]   = pixel.x + (128 - (width / 2));
+      b[c*6+1] = s ? pixel.y + (128 - height + 8) : pixel.y + (128 - (height / 2));
       b[c*6+2] = z_index(image_name) + (s ? (height - pixel.y - 1) : 0); // z
       b[c*6+3] = pixel.color.r;
       b[c*6+4] = pixel.color.g;
       b[c*6+5] = pixel.color.b;
+      // console.log("i: ", i, pixel.y, height, z_index(image_name), b[c*6+2]);
+      // b[c*6]   = pixel.x;
+      // b[c*6+1] = pixel.y;
+      // b[c*6+2] = z_index(image_name) + (s ? (height - pixel.y - 1) : 0); // z
+      // b[c*6+3] = pixel.color.r;
+      // b[c*6+4] = pixel.color.g;
+      // b[c*6+5] = pixel.color.b;
       c++;
     }
   }
