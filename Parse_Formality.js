@@ -18,13 +18,6 @@ function image_to_hex(image_name, image_info) {
       b[c*6+3] = pixel.color.r;
       b[c*6+4] = pixel.color.g;
       b[c*6+5] = pixel.color.b;
-      // console.log("i: ", i, pixel.y, height, z_index(image_name), b[c*6+2]);
-      // b[c*6]   = pixel.x;
-      // b[c*6+1] = pixel.y;
-      // b[c*6+2] = z_index(image_name) + (s ? (height - pixel.y - 1) : 0); // z
-      // b[c*6+3] = pixel.color.r;
-      // b[c*6+4] = pixel.color.g;
-      // b[c*6+5] = pixel.color.b;
       c++;
     }
   }
@@ -63,12 +56,12 @@ const file_content = (image_name, folder_name, image_info) => {
   var z_index_comment = "// z_index: "+z_index(image_name);
   var scale = z_scale(image_name) ? ", will scale on y\n" : "\n";
   var f_name = folder_name ? "." + folder_name : "" 
-  return z_index_comment+scale+"Kaelin.Assets"+f_name+"."+term_name(image_name)+": VoxBox\n" + 
+  return z_index_comment+scale+"KL.Game.Field.Tiles."+term_name(image_name)+": VoxBox\n" + 
     '  VoxBox.parse("'+hex_content+'")';
 }
 
 async function save_fm_file(folder, image_name, content){
-  var path = "./fm_images/"+folder+"/"+term_name(image_name)+".kind";
+  var path = "./fm_images/"+folder+"/tiles/"+term_name(image_name)+".kind";
   // console.log("Will save: ",path);
   try {
     fs.writeFileSync(path, content);
